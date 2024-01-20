@@ -24,13 +24,22 @@ jobs:
         md_file_count=$(ls -1 *.md | wc -l)
 
         if [ "$md_file_count" -gt 5 ]; then
-          echo "Number of .md files in '/news' folder is 5. Starting publish script..."
+          echo "Number of .md files in '/news' folder is over or equal to 5. Starting publish script..."
           cd ..
           chmod +x publish.js
+
+          echo "Publishing Blogs..."
           node ./publish.js
 
-        echo "Deleting blogs from current Outgoing Directory"
-        rm -f news/*.md
+          echo "Back up and Clean up"
+          rm -f news/*.md
+
+          # Commit and push changes
+          git config --global user.email "bhattacharyasaptarshi2001@gmail.com"
+          git config --global user.name "Saptarshi"
+          git add -A
+          git commit -m "Delete excess .md files"
+          git push
         
         else
           echo "Number of .md files in '/news' folder is not equal to 5. Exiting."
