@@ -42,6 +42,6 @@ jobs:
           git push
         
         else
-          echo "Number of .md files in '/news' folder is not equal to 5. Exiting."
-          exit 1
+          echo "Not Enough Articles yet!"
+          exit 0
         fi
