@@ -1,0 +1,38 @@
+name: PR Workflow
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check-news-folder:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '14'
+
+    - name: Check Number of .md Files
+      run: |
+        cd news
+        md_file_count=$(ls -1 *.md | wc -l)
+
+        if [ "$md_file_count" -gt 5 ]; then
+          echo "Number of .md files in '/news' folder is 5. Starting publish script..."
+          cd ..
+          chmod +x publish.js
+          node ./publish.js
+
+        echo "Deleting blogs from current Outgoing Directory"
+        rm -f news/*.md
+        
+        else
+          echo "Number of .md files in '/news' folder is not equal to 5. Exiting."
+          exit 1
+        fi
