@@ -17,18 +17,22 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: '14'
+    
+    - name: Configure OpenSSL for Phantom
+      run: export OPENSSL_CONF=/etc/ssl
 
     - name: Check Number of .md Files
       run: |
         cd news
         md_file_count=$(ls -1 *.md | wc -l)
 
-        if [ "$md_file_count" -gt 5 ]; then
+        if [ "$md_file_count" -gt 0 ]; then
           echo "Number of .md files in '/news' folder is over or equal to 5. Starting publish script..."
           cd ..
           chmod +x publish.js
 
           echo "Publishing Blogs..."
+          yarn install
           node ./publish.js
 
           echo "Back up and Clean up"
